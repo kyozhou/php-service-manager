@@ -1,5 +1,6 @@
 {
     "name": "kyozhou/php-service-manager",
+    "version": "1.0.0",
     "license": "MIT",
     "authors": [
         {
