@@ -10,5 +10,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3"
+    },
+    "autoload": {
+        "files": ["main.php"]
     }
 }

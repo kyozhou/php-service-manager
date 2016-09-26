@@ -1,4 +1,5 @@
 <?php
+die('test ok');die;
 $command = @$argv[1] ?? 'start';
 $pid = @file_get_contents('logger.pid');
 if(empty($pid) && $command == 'start') {
