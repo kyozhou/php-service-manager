@@ -1,14 +1,19 @@
 <?php
+//TODO add signal to auto delete pid file
+//TODO add multi process support
 error_reporting(E_ALL);
 ini_set( 'display_errors', 'On');
 global $argv;
 //$psm_command = @$argv[1] ?? 'start';
-if(!empty($argv[1])) {
+
+if(!empty($argv[1]) && $argv[1] == 'execute') {
+    //do script
+}else {
     if(@$argv[0] == 'main.php') {
         die('don\'t use main.php');
     }
     list($psm_file, $psm_ext) = explode('.', @$argv[0]);
-    $psm_command = $argv[1];
+    $psm_command = @$argv[1] ?? 'start';
     global $pidFileName;
     global $scriptName;
     $pidFileName = $psm_file . '.pid';
@@ -25,12 +30,7 @@ if(!empty($argv[1])) {
     }else {
         die("\ncommand error or process has started. \nphp main.php start|stop|restart\n");
     }
-    file_put_contents("/tmp/logger.log", "\nsub\n", FILE_APPEND);
     die;
-}else {
-    //continue;
-    //echo 'processing...';
-    //file_put_contents("/tmp/logger.log", "\nsub\n", FILE_APPEND);
 }
 
 function psm_start() {
@@ -38,32 +38,24 @@ function psm_start() {
     //$process = new swoole_process('psm_callback_function', true);
     $process = new swoole_process('psm_callback_function');
     $pid = $process->start();
-    swoole_process::daemon(true, false);
+    //swoole_process::daemon(false, false);
     //$result = swoole_process::wait(true);//blocking
     /*if($result !== false) {
         unlink($pidFileName);
     }*/
-    /*swoole_process::signal(SIGCHLD, function($sig) {
-        //必须为false，非阻塞模式
-        file_put_contents("/tmp/logger.log", "$sig\n", FILE_APPEND);
-        while($ret =  swoole_process::wait(false)) {
-            echo "PID={$ret['pid']}\n";
-            file_put_contents("/tmp/logger.log", "PID={$ret['pid']}\n", FILE_APPEND);
-        }
-    });*/
 }
 
 function psm_callback_function(swoole_process $worker)
 {
-    global $pidFileName;
-    global $scriptName;
-    $worker->exec('/usr/bin/php', [$scriptName]);
-    $worker->signal(SIGTERM, function($sig) {
-        global $pidFileName;
-        unlink($pidFileName);
-    });
+    global $scriptName, $pidFileName;
     file_put_contents($pidFileName, $worker->pid);
     echo $worker->pid . " started\n";
+    /*swoole_process::signal(SIGTERM | SIGINT | SIGKILL | SIGCHLD, function($sig) {
+        file_put_contents("/tmp/logger.log", "signal term\n", FILE_APPEND);
+        global $pidFileName;
+        unlink($pidFileName);
+    });*/
+    $worker->exec('/usr/bin/php', [$scriptName, 'execute']);
 }
 
 function psm_stop($pid) {
