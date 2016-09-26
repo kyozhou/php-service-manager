@@ -1,0 +1,11 @@
+{
+    "name": "kyozhou/php-service-manager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "周斌",
+            "email": "kyozhou@sina.com"
+        }
+    ],
+    "require": {}
+}
