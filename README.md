@@ -15,3 +15,5 @@ while(true) {
     sleep(1);
 }
 ```
+
+ [author blog](http://kyozhou.com/ "kyozhou.com") 
