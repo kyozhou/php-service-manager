@@ -7,8 +7,8 @@ tool help you to manage your process, based on swoole
 3. `php yourscript.php start|stop|restart`
 
 ## use case
-```<?php <br>
-require 'vendor/autoload.php';
+> <?php
+> require 'vendor/autoload.php';
 while(true) {
     file_put_contents("/tmp/logger.log", rand(1, 9) . ',', FILE_APPEND);
     sleep(1);
