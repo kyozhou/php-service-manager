@@ -7,7 +7,9 @@ tool help you to manage your process, based on swoole
 3. `php yourscript.php start|stop|restart`
 
 ## use case
-`<?php 
+`
+<?php 
+
 require 'vendor/autoload.php';
 
 while(true) {
