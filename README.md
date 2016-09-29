@@ -9,9 +9,7 @@ tool help you to manage your process, based on swoole
 ## use case
 `
 <?php 
-
 require 'vendor/autoload.php';
-
 while(true) {
     file_put_contents("/tmp/logger.log", rand(1, 9) . ',', FILE_APPEND);
     sleep(1);

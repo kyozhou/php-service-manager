@@ -34,15 +34,14 @@ if(!empty($argv[1]) && $argv[1] == 'execute') {
 }
 
 function psm_start() {
+    swoole_process::daemon(true, true);
     global $pidFileName;
-    //$process = new swoole_process('psm_callback_function', true);
-    $process = new swoole_process('psm_callback_function');
-    $pid = $process->start();
-    //swoole_process::daemon(false, false);
-    //$result = swoole_process::wait(true);//blocking
-    /*if($result !== false) {
-        unlink($pidFileName);
-    }*/
+    $fpid = getmypid();
+    $process = new swoole_process('psm_callback_function', true);
+    //$process = new swoole_process('psm_callback_function');
+    $process->start();
+    swoole_process::wait(true);//blocking
+    unlink($pidFileName);
 }
 
 function psm_callback_function(swoole_process $worker)
@@ -50,18 +49,13 @@ function psm_callback_function(swoole_process $worker)
     global $scriptName, $pidFileName;
     file_put_contents($pidFileName, $worker->pid);
     echo $worker->pid . " started\n";
-    /*swoole_process::signal(SIGTERM | SIGINT | SIGKILL | SIGCHLD, function($sig) {
-        file_put_contents("/tmp/logger.log", "signal term\n", FILE_APPEND);
-        global $pidFileName;
-        unlink($pidFileName);
-    });*/
     $worker->exec('/usr/bin/php', [$scriptName, 'execute']);
 }
 
 function psm_stop($pid) {
     swoole_process::kill($pid, SIGTERM);
     global $pidFileName;
-    unlink($pidFileName);
+    //unlink($pidFileName);
     echo "$pid stoped\n";
 }
 
