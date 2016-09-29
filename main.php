@@ -49,7 +49,10 @@ function psm_callback_function(swoole_process $worker)
     global $scriptName, $pidFileName;
     file_put_contents($pidFileName, $worker->pid);
     echo $worker->pid . " started\n";
-    $worker->exec('/usr/bin/php', [$scriptName, 'execute']);
+    $phpBinPath = '/usr/bin/php';
+    if(file_exists($phpBinPath)) {
+        $worker->exec($phpBinPath, [$scriptName, 'execute']);
+    }
 }
 
 function psm_stop($pid) {
@@ -58,4 +61,5 @@ function psm_stop($pid) {
     //unlink($pidFileName);
     echo "$pid stoped\n";
 }
+
 
