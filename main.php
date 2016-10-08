@@ -34,11 +34,12 @@ if(!empty($argv[1]) && $argv[1] == 'execute') {
 }
 
 function psm_start() {
-    swoole_process::daemon(true, true);
+    echo "process started\n";
+    swoole_process::daemon(true, false);
     global $pidFileName;
     $fpid = getmypid();
-    $process = new swoole_process('psm_callback_function', true);
-    //$process = new swoole_process('psm_callback_function');
+    //$process = new swoole_process('psm_callback_function', true);
+    $process = new swoole_process('psm_callback_function');
     $process->start();
     swoole_process::wait(true);//blocking
     unlink($pidFileName);
@@ -49,6 +50,7 @@ function psm_callback_function(swoole_process $worker)
     global $scriptName, $pidFileName;
     file_put_contents($pidFileName, $worker->pid);
     echo $worker->pid . " started\n";
+    //$worker->write($worker->pid . " started\n");
     $phpBinPath = '/usr/bin/php';
     if(file_exists($phpBinPath)) {
         $worker->exec($phpBinPath, [$scriptName, 'execute']);
