@@ -3,17 +3,20 @@
 //TODO add multi process support
 error_reporting(E_ALL);
 ini_set( 'display_errors', 'On');
+if(!function_exists('swoole_process')) {
+    die("You must install swoole extension first !");
+}
 global $argv;
 //$psm_command = @$argv[1] ?? 'start';
 
-if(!empty($argv[1]) && $argv[1] == 'execute') {
+if(!empty($argv[1]) && ($argv[1] == 'execute' || $argv[1] == 'debug')) {
     //do script
 }else {
     if(@$argv[0] == 'main.php') {
         die('don\'t use main.php');
     }
     list($psm_file, $psm_ext) = explode('.', @$argv[0]);
-    $psm_command = @$argv[1] ?? 'start';
+    $psm_command = @$argv[1] ? $argv[1] : 'start';
     global $pidFileName;
     global $scriptName;
     $pidFileName = $psm_file . '.pid';
