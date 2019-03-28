@@ -16,4 +16,4 @@ while(true) {
 }
 ```
 
-author blog: [http://kyozhou.com](http://kyozhou.com/ "kyozhou.com") 
+author email: kyozhou@sina.com
