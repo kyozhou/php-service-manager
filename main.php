@@ -3,7 +3,7 @@
 //TODO add multi process support
 error_reporting(E_ALL);
 ini_set( 'display_errors', 'On');
-if(!function_exists('swoole_process')) {
+if(!function_exists('swoole_process') && !class_exists('swoole_process')) {
     die("You must install swoole extension first !");
 }
 global $argv;
